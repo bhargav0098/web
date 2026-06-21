@@ -1,8 +1,8 @@
 // constants.js — ported from Python config.py
 
 export const TARGET_FPS = 60;
-export const TRAIL_HISTORY = 5;
-export const TRAIL_MAX_AGE = 0.08;
+export const TRAIL_HISTORY = 3;
+export const TRAIL_MAX_AGE = 0.05;
 export const FRUIT_MIN_RADIUS = 36;
 export const FRUIT_MAX_RADIUS = 72;
 export const FREEZE_DURATION = 3.5;

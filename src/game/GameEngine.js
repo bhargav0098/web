@@ -78,6 +78,17 @@ export class GameEngine {
       this.trail = [];
       return;
     }
+    const last = this.trail[this.trail.length - 1];
+    if (last) {
+      const elapsed = now - last.t;
+      if (elapsed > 0) {
+        const speed = Math.hypot(x - last.x, y - last.y) / elapsed;
+        const threshold = this.levelCfg ? this.levelCfg.sliceThreshold : 350;
+        if (speed < threshold) {
+          this.trail = [];
+        }
+      }
+    }
     this.trail.push({ x, y, t: now });
     if (this.trail.length > TRAIL_HISTORY) this.trail.shift();
   }

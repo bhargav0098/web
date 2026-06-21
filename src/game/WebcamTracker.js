@@ -66,7 +66,21 @@ export class WebcamTracker {
     const result = this.handLandmarker.detectForVideo(this.videoEl, now);
 
     if (result.landmarks && result.landmarks.length > 0) {
-      const lm = result.landmarks[0][INDEX_TIP];
+      const hand = result.landmarks[0];
+      const wrist = hand[0];
+      const indexPip = hand[6];
+      const indexTip = hand[INDEX_TIP];
+
+      if (wrist && indexPip && indexTip) {
+        const distTip = Math.hypot(indexTip.x - wrist.x, indexTip.y - wrist.y, indexTip.z - wrist.z);
+        const distPip = Math.hypot(indexPip.x - wrist.x, indexPip.y - wrist.y, indexPip.z - wrist.z);
+        if (distTip <= distPip) {
+          if (this.onFinger) this.onFinger(null, null);
+          return;
+        }
+      }
+
+      const lm = indexTip;
       
       // Calculate aspect ratios for object-fit: cover mapping
       const videoW = this.videoEl.videoWidth || 1280;
