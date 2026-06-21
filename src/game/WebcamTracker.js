@@ -72,9 +72,9 @@ export class WebcamTracker {
       const indexTip = hand[INDEX_TIP];
 
       if (wrist && indexPip && indexTip) {
-        const distTip = Math.hypot(indexTip.x - wrist.x, indexTip.y - wrist.y, indexTip.z - wrist.z);
-        const distPip = Math.hypot(indexPip.x - wrist.x, indexPip.y - wrist.y, indexPip.z - wrist.z);
-        if (distTip <= distPip) {
+        const distTip = Math.hypot(indexTip.x - wrist.x, indexTip.y - wrist.y);
+        const distPip = Math.hypot(indexPip.x - wrist.x, indexPip.y - wrist.y);
+        if (distTip <= distPip * 0.95) {
           if (this.onFinger) this.onFinger(null, null);
           return;
         }
