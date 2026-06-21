@@ -1,8 +1,8 @@
 // constants.js — ported from Python config.py
 
 export const TARGET_FPS = 60;
-export const TRAIL_HISTORY = 10;
-export const TRAIL_MAX_AGE = 0.18;
+export const TRAIL_HISTORY = 5;
+export const TRAIL_MAX_AGE = 0.08;
 export const FRUIT_MIN_RADIUS = 36;
 export const FRUIT_MAX_RADIUS = 72;
 export const FREEZE_DURATION = 3.5;
@@ -28,7 +28,7 @@ export const LEVELS = {
     sliceThreshold: 250,
     bombChance: 0.04,
     multiSpawnChance: 0.08,
-    scoreTarget: 100,
+    scoreTarget: 200,
     lives: 5,
   },
   2: {
@@ -42,7 +42,7 @@ export const LEVELS = {
     sliceThreshold: 350,
     bombChance: 0.08,
     multiSpawnChance: 0.16,
-    scoreTarget: 150,
+    scoreTarget: 400,
     lives: 4,
   },
   3: {
@@ -56,7 +56,7 @@ export const LEVELS = {
     sliceThreshold: 450,
     bombChance: 0.13,
     multiSpawnChance: 0.28,
-    scoreTarget: 200,
+    scoreTarget: 800,
     lives: 3,
   },
 };

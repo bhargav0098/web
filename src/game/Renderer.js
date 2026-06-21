@@ -354,7 +354,7 @@ export class Renderer {
     }
 
     // Trail
-    this._drawTrail(engine.trail, now);
+    this._drawTrail(engine, now);
 
     // Popups
     for (const p of engine.popups) {
@@ -487,12 +487,21 @@ export class Renderer {
     }
   }
 
-  _drawTrail(trail, now) {
+  _drawTrail(engine, now) {
     const ctx = this.ctx;
+    const trail = engine.trail;
     if (trail.length < 2) return;
+
+    const threshold = engine.levelCfg ? engine.levelCfg.sliceThreshold : 350;
 
     for (let i = 1; i < trail.length; i++) {
       const p1 = trail[i - 1], p2 = trail[i];
+      const elapsed = p2.t - p1.t;
+      if (elapsed > 0) {
+        const speed = Math.hypot(p2.x - p1.x, p2.y - p1.y) / elapsed;
+        if (speed < threshold) continue;
+      }
+
       const age = now - p2.t;
       const alpha = Math.max(0, 1 - age / TRAIL_MAX_AGE);
       if (alpha <= 0) continue;
@@ -511,17 +520,28 @@ export class Renderer {
       ctx.restore();
     }
 
-    // Glowing tip
+    // Glowing tip (only drawn when actively slicing)
     const tip = trail[trail.length - 1];
     if (tip && now - tip.t < 0.05) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(tip.x, tip.y, 6, 0, Math.PI * 2);
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = '#ffffaa';
-      ctx.shadowBlur = 16;
-      ctx.fill();
-      ctx.restore();
+      let drawTip = true;
+      if (trail.length >= 2) {
+        const p1 = trail[trail.length - 2];
+        const elapsed = tip.t - p1.t;
+        if (elapsed > 0) {
+          const speed = Math.hypot(tip.x - p1.x, tip.y - p1.y) / elapsed;
+          if (speed < threshold) drawTip = false;
+        }
+      }
+      if (drawTip) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(tip.x, tip.y, 6, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#ffffaa';
+        ctx.shadowBlur = 16;
+        ctx.fill();
+        ctx.restore();
+      }
     }
   }
 
